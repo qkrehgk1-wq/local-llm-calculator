@@ -4,14 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>로컬 LLM 내 PC 맞춤 계산기 | AI 모델 구동 성능 & 속도 예측</title>
-  <meta name="description" content="내 컴퓨터 사양(GPU/VRAM/RAM)으로 구동 가능한 최적의 로컬 AI 모델(DeepSeek-R1, EXAONE 3.5, Qwen, Llama)과 예상 토큰 속도를 즉시 계산하세요.">
+  <meta name="description" content="내 PC의 GPU·메모리 사양으로 로컬 LLM이 돌아가는지, 대략 어느 속도가 나오는지 추정하는 오프라인 계산기(추정치).">
   <meta property="og:title" content="로컬 LLM 내 PC 맞춤 계산기">
-  <meta property="og:description" content="내 컴퓨터 사양으로 구동 가능한 AI 모델과 예상 토큰 속도(t/s), 전력 효율을 즉시 계산합니다.">
+  <meta property="og:description" content="내 PC 사양으로 구동 가능한 로컬 AI 모델과 예상 속도를 추정합니다(추정치).">
   <meta property="og:type" content="website">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style id="tw">*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.absolute{position:absolute}.relative{position:relative}.-right-24{right:-6rem}.-top-24{top:-6rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:.25rem}.mb-1\.5{margin-bottom:.375rem}.mb-2\.5{margin-bottom:.625rem}.mb-3{margin-bottom:.75rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-1\.5{margin-top:.375rem}.mt-2{margin-top:.5rem}.mt-6{margin-top:1.5rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.grid{display:grid}.hidden{display:none}.h-1\.5{height:.375rem}.h-2{height:.5rem}.h-72{height:18rem}.min-h-screen{min-height:100vh}.w-2{width:.5rem}.w-32{width:8rem}.w-72{width:18rem}.w-full{width:100%}.min-w-\[760px\]{min-width:760px}.max-w-3xl{max-width:48rem}.max-w-6xl{max-width:72rem}.max-w-\[190px\]{max-width:190px}.flex-shrink-0{flex-shrink:0}.border-collapse{border-collapse:collapse}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}.cursor-pointer{cursor:pointer}.select-all{-webkit-user-select:all;-moz-user-select:all;user-select:all}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-3\.5{gap:.875rem}.gap-4{gap:1rem}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px*var(--tw-divide-y-reverse))}.divide-slate-800\/60>:not([hidden])~:not([hidden]){border-color:rgba(30,41,59,.6)}.self-start{align-self:flex-start}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-xl{border-radius:.75rem}.rounded-l-lg{border-top-left-radius:.5rem;border-bottom-left-radius:.5rem}.rounded-r-lg{border-top-right-radius:.5rem;border-bottom-right-radius:.5rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-amber-500\/30{border-color:rgba(245,158,11,.3)}.border-emerald-500\/30{border-color:rgba(16,185,129,.3)}.border-indigo-400\/30{border-color:rgba(129,140,248,.3)}.border-indigo-500\/20{border-color:rgba(99,102,241,.2)}.border-indigo-500\/30{border-color:rgba(99,102,241,.3)}.border-indigo-800\/40{border-color:rgba(55,48,163,.4)}.border-rose-500\/30{border-color:rgba(244,63,94,.3)}.border-slate-600\/30{border-color:rgba(71,85,105,.3)}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85/var(--tw-border-opacity,1))}.border-slate-700\/80{border-color:rgba(51,65,85,.8)}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1))}.border-slate-800\/60{border-color:rgba(30,41,59,.6)}.border-slate-800\/70{border-color:rgba(30,41,59,.7)}.border-slate-800\/80{border-color:rgba(30,41,59,.8)}.bg-amber-400{--tw-bg-opacity:1;background-color:rgb(251 191 36/var(--tw-bg-opacity,1))}.bg-amber-500\/10{background-color:rgba(245,158,11,.1)}.bg-emerald-400{--tw-bg-opacity:1;background-color:rgb(52 211 153/var(--tw-bg-opacity,1))}.bg-emerald-500\/10{background-color:rgba(16,185,129,.1)}.bg-indigo-400{--tw-bg-opacity:1;background-color:rgb(129 140 248/var(--tw-bg-opacity,1))}.bg-indigo-500\/10{background-color:rgba(99,102,241,.1)}.bg-indigo-500\/20{background-color:rgba(99,102,241,.2)}.bg-indigo-500\/5{background-color:rgba(99,102,241,.05)}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229/var(--tw-bg-opacity,1))}.bg-indigo-950\/20{background-color:rgba(30,27,75,.2)}.bg-indigo-950\/60{background-color:rgba(30,27,75,.6)}.bg-rose-500{--tw-bg-opacity:1;background-color:rgb(244 63 94/var(--tw-bg-opacity,1))}.bg-rose-500\/10{background-color:rgba(244,63,94,.1)}.bg-slate-700\/40{background-color:rgba(51,65,85,.4)}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59/var(--tw-bg-opacity,1))}.bg-slate-800\/80{background-color:rgba(30,41,59,.8)}.bg-slate-800\/90{background-color:rgba(30,41,59,.9)}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.bg-slate-900\/90{background-color:rgba(15,23,42,.9)}.bg-slate-950{--tw-bg-opacity:1;background-color:rgb(2 6 23/var(--tw-bg-opacity,1))}.bg-slate-950\/40{background-color:rgba(2,6,23,.4)}.bg-slate-950\/50{background-color:rgba(2,6,23,.5)}.bg-slate-950\/70{background-color:rgba(2,6,23,.7)}.bg-slate-950\/80{background-color:rgba(2,6,23,.8)}.bg-slate-950\/90{background-color:rgba(2,6,23,.9)}.bg-gradient-to-r{background-image:linear-gradient(to right,var(--tw-gradient-stops))}.from-indigo-400{--tw-gradient-from:#818cf8 var(--tw-gradient-from-position);--tw-gradient-to:rgba(129,140,248,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.via-purple-400{--tw-gradient-to:rgba(192,132,252,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#c084fc var(--tw-gradient-via-position),var(--tw-gradient-to)}.to-pink-400{--tw-gradient-to:#f472b6 var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.p-1\.5{padding:.375rem}.p-3{padding:.75rem}.p-3\.5{padding:.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-3\.5{padding-left:.875rem;padding-right:.875rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3\.5{padding-top:.875rem;padding-bottom:.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pb-6{padding-bottom:1.5rem}.pt-4{padding-top:1rem}.pt-5{padding-top:1.25rem}.text-left{text-align:left}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-normal{line-height:1.5}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-.025em}.tracking-wider{letter-spacing:.05em}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36/var(--tw-text-opacity,1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153/var(--tw-text-opacity,1))}.text-indigo-300{--tw-text-opacity:1;color:rgb(165 180 252/var(--tw-text-opacity,1))}.text-indigo-300\/80{color:rgba(165,180,252,.8)}.text-indigo-400{--tw-text-opacity:1;color:rgb(129 140 248/var(--tw-text-opacity,1))}.text-pink-400{--tw-text-opacity:1;color:rgb(244 114 182/var(--tw-text-opacity,1))}.text-rose-400{--tw-text-opacity:1;color:rgb(251 113 133/var(--tw-text-opacity,1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240/var(--tw-text-opacity,1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225/var(--tw-text-opacity,1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.accent-indigo-500{accent-color:#6366f1}.shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.shadow,.shadow-2xl{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgba(0,0,0,.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color)}.shadow-inner,.shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.blur-3xl{--tw-blur:blur(64px)}.blur-3xl,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.selection\:bg-indigo-500 ::-moz-selection{--tw-bg-opacity:1;background-color:rgb(99 102 241/var(--tw-bg-opacity,1))}.selection\:bg-indigo-500 ::selection{--tw-bg-opacity:1;background-color:rgb(99 102 241/var(--tw-bg-opacity,1))}.selection\:text-white ::-moz-selection{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.selection\:text-white ::selection{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.selection\:bg-indigo-500::-moz-selection{--tw-bg-opacity:1;background-color:rgb(99 102 241/var(--tw-bg-opacity,1))}.selection\:bg-indigo-500::selection{--tw-bg-opacity:1;background-color:rgb(99 102 241/var(--tw-bg-opacity,1))}.selection\:text-white::-moz-selection{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.selection\:text-white::selection{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.hover\:bg-indigo-500:hover{--tw-bg-opacity:1;background-color:rgb(99 102 241/var(--tw-bg-opacity,1))}.hover\:bg-slate-700:hover{--tw-bg-opacity:1;background-color:rgb(51 65 85/var(--tw-bg-opacity,1))}.hover\:bg-slate-800\/40:hover{background-color:rgba(30,41,59,.4)}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.focus\:border-indigo-500:focus{--tw-border-opacity:1;border-color:rgb(99 102 241/var(--tw-border-opacity,1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\:ring-indigo-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(99 102 241/var(--tw-ring-opacity,1))}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width:640px){.sm\:inline{display:inline}.sm\:w-auto{width:auto}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}}@media (min-width:768px){.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.md\:p-5{padding:1.25rem}.md\:p-7{padding:1.75rem}.md\:p-8{padding:2rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:text-base{font-size:1rem;line-height:1.5rem}}@media (min-width:1024px){.lg\:col-span-2{grid-column:span 2/span 2}.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.lg\:flex-row{flex-direction:row}.lg\:items-center{align-items:center}.lg\:self-auto{align-self:auto}}</style>
   <style>
-    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
+    body { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', sans-serif; }
     /* 커스텀 스크롤바 */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: #0f172a; }
@@ -27,13 +26,13 @@
       <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
         <div class="inline-flex items-center gap-2 bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-indigo-500/20 shadow-inner">
           <span class="animate-pulse w-2 h-2 rounded-full bg-indigo-400"></span>
-          2026 최신 AI 규격 반영 (RTX 50 · DeepSeek-R1 · EXAONE 3.5)
+          추정치 · 모델 목록 기준: 2025년 상반기 세대 (Llama 3.x · Qwen 2.5 · Gemma 2 · DeepSeek-R1 증류 · EXAONE 3.5)
         </div>
         <div class="flex items-center gap-2">
           <button onclick="shareConfig(this)" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 hover:text-white rounded-xl text-xs font-semibold border border-slate-700 transition cursor-pointer shadow-sm">
             <span>🔗</span> 결과 링크 공유
           </button>
-          <span class="text-xs text-slate-500 hidden sm:inline">v2.2 정식 출시판</span>
+          <span class="text-xs text-slate-500 hidden sm:inline">v3.0 · 인터넷 없이 동작</span>
         </div>
       </div>
       <h1 class="text-2xl md:text-4xl font-extrabold text-white tracking-tight mb-2.5">
@@ -41,31 +40,24 @@
       </h1>
       <p class="text-slate-400 text-sm md:text-base max-w-3xl leading-relaxed">
         내 컴퓨터 그래픽카드(VRAM), 시스템 RAM, 문맥 길이(Context Window)를 선택하면
-        구동 가능한 최적 모델, 실제 예상 토큰 생성 속도(t/s), 전력 소모 및 전기세를 즉시 계산합니다.
+        구동 가능한 모델과 예상 토큰 생성 속도(t/s), 전력 소모 및 전기요금(상한)을 추정합니다. 실제 PC에서 잰 값과 최대 2배쯤 다를 수 있습니다.
       </p>
     </header>
 
-    <!-- 내 PC 스펙 감지 알림 배너 -->
-    <div class="bg-gradient-to-r from-indigo-950/70 via-purple-950/50 to-slate-900 border border-indigo-500/40 rounded-2xl p-4 md:p-5 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl relative overflow-hidden">
+    <!-- 브라우저 GPU 정보(참고용) 배너 -->
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl p-4 md:p-5 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div class="flex items-center gap-3.5">
-        <div class="p-3 bg-indigo-500/20 text-indigo-400 rounded-xl border border-indigo-500/30 text-2xl flex-shrink-0">
-          💻
-        </div>
+        <div class="p-3 bg-indigo-500/20 text-indigo-400 rounded-xl border border-indigo-500/30 text-2xl flex-shrink-0">💻</div>
         <div>
-          <div class="text-xs text-indigo-300 font-bold flex items-center gap-2">
-            <span>현재 접속 중인 PC 스펙 감지됨</span>
-            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold">실제 하드웨어</span>
-          </div>
-          <div id="detectedGpuName" class="text-sm md:text-base font-extrabold text-white mt-0.5">
-            Intel 12세대 Core i5-1235U · Iris Xe 내장 그래픽 · 16GB RAM
-          </div>
+          <div class="text-xs text-indigo-300 font-bold">이 브라우저가 알려 주는 그래픽 장치 (참고용)</div>
+          <div id="detectedGpuName" class="text-sm md:text-base font-extrabold text-white mt-0.5">확인 중…</div>
           <div id="detectedGpuDesc" class="text-xs text-slate-400 mt-0.5">
-            외장 GPU(RTX)가 없는 내장 그래픽 환경으로, <strong>CPU + 시스템 메모리(RAM)</strong>로 AI를 구동합니다.
+            브라우저가 알려 주는 이름일 뿐 정확한 사양(VRAM·대역폭)은 아닙니다. 아래에서 직접 고르세요.
           </div>
         </div>
       </div>
-      <button id="applyMyPcBtn" onclick="applyMyPcSpecs()" class="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 active:scale-95 text-white text-xs font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-1.5 flex-shrink-0 cursor-pointer border border-indigo-400/30">
-        <span>⚡</span> 내 PC 사양으로 즉시 적용하기
+      <button id="applyLaptopBtn" class="w-full sm:w-auto px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white text-xs font-bold rounded-xl transition flex-shrink-0 cursor-pointer border border-indigo-400/30">
+        일반 업무용 노트북(내장그래픽·16GB) 기준으로 맞추기
       </button>
     </div>
 
@@ -88,12 +80,12 @@
             <span class="text-[11px] text-slate-500">선택 시 하단 슬라이더 자동 동기화</span>
           </label>
           <select id="gpuPreset" class="w-full bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm shadow-sm transition">
-            <optgroup label="📍 감지된 내 실제 PC">
-              <option value="0,60,28" id="myPcOption" selected>내 현재 PC (Intel Core i5-1235U · Iris Xe · 16GB RAM)</option>
+            <optgroup label="📍 일반 업무용 PC">
+              <option value="0,60,28" id="laptopOption" selected>업무용 노트북 (내장그래픽 · 메모리 대역폭 약 60GB/s · 28W급)</option>
             </optgroup>
             <optgroup label="⚡ NVIDIA GeForce RTX 50 시리즈 (신규 Blackwell)">
               <option value="32,1792,600">RTX 5090 (VRAM 32GB · 1,792 GB/s · 600W)</option>
-              <option value="16,1000,400">RTX 5080 (VRAM 16GB · 1,000 GB/s · 400W)</option>
+              <option value="16,960,360">RTX 5080 (VRAM 16GB · 960 GB/s · 360W)</option>
               <option value="16,896,300">RTX 5070 Ti (VRAM 16GB · 896 GB/s · 300W)</option>
               <option value="12,672,250">RTX 5070 (VRAM 12GB · 672 GB/s · 250W)</option>
             </optgroup>
@@ -109,7 +101,7 @@
               <option value="24,936,350">RTX 3090 / 3090 Ti (VRAM 24GB · 936 GB/s · 350W)</option>
               <option value="12,912,350">RTX 3080 Ti / 3080 12GB (VRAM 12GB · 912 GB/s · 350W)</option>
               <option value="10,760,320">RTX 3080 10GB (VRAM 10GB · 760 GB/s · 320W)</option>
-              <option value="12,360,170">RTX 3060 12GB (VRAM 12GB · 가성비 입문 추천 · 170W)</option>
+              <option value="12,360,170">RTX 3060 12GB (VRAM 12GB · 360 GB/s · 170W)</option>
               <option value="8,448,220">RTX 3070 / 3060 Ti (VRAM 8GB · 448 GB/s · 220W)</option>
             </optgroup>
             <optgroup label="🔴 AMD Radeon RX 7000 시리즈">
@@ -138,11 +130,21 @@
         <div>
           <label class="block text-xs font-medium text-slate-300 mb-1.5">모델 양자화 (압축률)</label>
           <select id="quantLevel" class="w-full bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm shadow-sm transition">
-            <option value="0.55">3-bit (Q3_K_M - 초절약, 품질 다소 저하)</option>
-            <option value="0.65" selected>4-bit (Q4_K_M - 표준 권장, 성능/품질 균형)</option>
-            <option value="0.80">5-bit (Q5_K_M - 고품질 지능 유지)</option>
-            <option value="0.95">6-bit (Q6_K - 초고품질)</option>
-            <option value="1.15">8-bit (Q8_0 - 원본 FP16에 가장 근접)</option>
+            <option value="0.55">3-bit (Q3_K_M - 메모리 절약, 품질 저하 가능)</option>
+            <option value="0.65" selected>4-bit (Q4_K_M - 가장 흔히 쓰는 압축률)</option>
+            <option value="0.80">5-bit (Q5_K_M)</option>
+            <option value="0.95">6-bit (Q6_K)</option>
+            <option value="1.15">8-bit (Q8_0 - 품질 손실 거의 없음)</option>
+          </select>
+        </div>
+
+        <!-- 모델에 쓸 수 있는 RAM 비율 -->
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1.5">모델에 쓸 수 있는 RAM 비율</label>
+          <select id="ramShare" class="w-full bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+            <option value="0.3">30% (다른 프로그램을 많이 켠 상태)</option>
+            <option value="0.5" selected>50% (일반적인 업무 중)</option>
+            <option value="0.65">65% (다른 프로그램을 거의 닫은 상태)</option>
           </select>
         </div>
 
@@ -150,11 +152,11 @@
         <div>
           <label class="block text-xs font-medium text-slate-300 mb-1.5">시스템 메모리 (RAM)</label>
           <select id="sysRam" class="w-full bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm shadow-sm transition">
-            <option value="8">8 GB (최소사양)</option>
-            <option value="16" selected>16 GB (내 PC 장착 RAM)</option>
-            <option value="32">32 GB (표준 권장)</option>
-            <option value="64">64 GB (오프로딩 원활)</option>
-            <option value="128">128 GB (대형 모델 오프로딩)</option>
+            <option value="8">8 GB</option>
+            <option value="16" selected>16 GB (업무용 노트북에 흔함)</option>
+            <option value="32">32 GB</option>
+            <option value="64">64 GB</option>
+            <option value="128">128 GB</option>
           </select>
         </div>
       </div>
@@ -175,7 +177,7 @@
             <span class="text-slate-400 text-xs">메모리 대역폭 (속도 결정)</span>
             <span id="bwVal" class="text-indigo-400 font-bold font-mono">60 GB/s</span>
           </div>
-          <input type="range" id="bwSlider" min="40" max="2000" step="10" value="60" class="w-full accent-indigo-500 cursor-pointer">
+          <input type="range" id="bwSlider" min="40" max="2000" step="1" value="60" class="w-full accent-indigo-500 cursor-pointer">
           <div class="flex justify-between text-[10px] text-slate-500 mt-1"><span>40 GB/s</span><span>1000</span><span>2000 GB/s</span></div>
         </div>
 
@@ -184,7 +186,7 @@
             <span class="text-slate-400 text-xs">최대 소비전력 (TDP)</span>
             <span id="tdpVal" class="text-indigo-400 font-bold font-mono">28 W</span>
           </div>
-          <input type="range" id="tdpSlider" min="20" max="650" step="10" value="28" class="w-full accent-indigo-500 cursor-pointer">
+          <input type="range" id="tdpSlider" min="20" max="650" step="1" value="28" class="w-full accent-indigo-500 cursor-pointer">
           <div class="flex justify-between text-[10px] text-slate-500 mt-1"><span>20W</span><span>350W</span><span>650W</span></div>
         </div>
 
@@ -194,13 +196,27 @@
             <span id="ctxVal" class="text-pink-400 font-bold font-mono">4K 토큰</span>
           </div>
           <select id="ctxSelect" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 mt-0.5">
-            <option value="4096" selected>4K (기본 대화 / ~0.6GB / 16GB RAM 추천)</option>
+            <option value="4096" selected>4K (짧은 대화 / KV 약 0.6GB)</option>
             <option value="8192">8K (일반 업무·문서 요약 / ~1.2GB)</option>
             <option value="16384">16K (코드베이스 및 긴 회의록 / ~2.4GB)</option>
             <option value="32768">32K (전문 서적·대용량 RAG / ~4.8GB)</option>
           </select>
           <div class="text-[10px] text-slate-500 mt-1">*KV 캐시가 시스템 메모리에 할당됨</div>
         </div>
+      </div>
+    </section>
+
+    <!-- 추가 설정 -->
+    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1.5" for="kwhPrice">전기 단가 (원/kWh)</label>
+        <input id="kwhPrice" type="number" min="0" max="1000" step="10" value="150" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm">
+        <div class="text-[11px] text-slate-500 mt-1">구간·계약에 따라 다릅니다. 표시되는 금액은 최대 전력으로 계속 돌렸을 때의 상한입니다.</div>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1.5" for="customParams">목록에 없는 모델 크기 (B, 10억 파라미터)</label>
+        <input id="customParams" type="number" min="0.1" max="1000" step="0.1" placeholder="예: 4.5" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm">
+        <div class="text-[11px] text-slate-500 mt-1">새로 나온 모델도 크기만 넣으면 아래 표 맨 위에 같은 방식으로 계산해 보여 줍니다.</div>
       </div>
     </section>
 
@@ -217,7 +233,7 @@
             <span>📊</span> 2. 모델별 구동 판정 및 체감 성능 분석
           </h2>
           <p class="text-xs text-slate-400 mt-1">
-            * 초당 15~20 토큰 이상이면 사람의 읽는 속도(독서 속도)보다 빨라 실무에서 끊김 없이 쾌적하게 사용 가능합니다.
+            * 초당 15~20 토큰 이상이면 대체로 읽는 속도보다 빠릅니다. 5 토큰 미만이면 답을 기다리는 느낌이 큽니다. (추정치)
           </p>
         </div>
 
@@ -257,580 +273,20 @@
           </div>
           <p class="leading-relaxed">
             모델 파라미터와 KV 캐시가 그래픽카드 VRAM 내에 전부 상주하면 GPU의 수백~수천 GB/s 초고속 대역폭을 온전히 누려 최대 속도가 나옵니다.
-            VRAM 용량을 넘어가 시스템 일반 RAM으로 일부 레이어가 넘어가면 PCIe 대역폭 병목으로 속도가 1/5~1/20 수준으로 급감합니다.
+            VRAM을 넘어 일부가 시스템 RAM으로 넘어가면 그 부분은 훨씬 느린 메모리로 읽게 되어 전체 속도가 크게 떨어집니다.
           </p>
         </div>
         <div class="bg-slate-950/50 p-3.5 rounded-xl border border-slate-800/60">
           <div class="font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
-            <span class="text-indigo-400">●</span> Ollama 원클릭 설치 및 실행 가이드
+            <span class="text-indigo-400">●</span> 추정 방법과 한계
           </div>
-          <p class="leading-relaxed">
-            공식 홈페이지(<a href="https://ollama.com" target="_blank" class="text-indigo-400 underline hover:text-indigo-300">ollama.com</a>)에서 설치 후
-            터미널(PowerShell 또는 CMD)에 표의 <strong>[복사]</strong> 버튼을 누른 후 붙여넣기만 하면 AI 모델 자동 다운로드 및 대화가 바로 시작됩니다.
-          </p>
+          <p class="leading-relaxed">속도 ≈ 메모리 대역폭 × 효율 ÷ 모델 메모리. 내장그래픽·CPU의 효율(0.20)은 실제 PC에서 잰 값으로 맞췄고, 외장 GPU 효율(0.68)은 실측 없는 참고값입니다. 모델 설치와 실행은 공식 사이트(ollama.com)의 안내를 따르세요. 위 명령은 모델을 내려받기 위해 인터넷이 필요합니다. 이 계산기 자체는 인터넷 없이 동작합니다.</p>
         </div>
       </div>
     </section>
   </div>
 
-  <script>
-    // 풍부해진 모델 카탈로그 (EXAONE 3.5, DeepSeek-R1 시리즈, Qwen 2.5, Llama 3.2/3.3, Gemma 2 등)
-    const models = [
-      // 🇰🇷 한국어 특화 (EXAONE 3.5 & 한국어 모델)
-      {
-        id: "exaone-2.4b",
-        name: "EXAONE 3.5 2.4B",
-        category: "korean",
-        categoryLabel: "한국어 특화",
-        params: 2.4,
-        desc: "LG AI연구원 공개 한국어 특화 초경량 모델. 노트북/저사양 PC에서도 눈 깜빡할 속도",
-        cmd: "ollama run exaone3.5:2.4b",
-        recommendedFor: "간단한 한국어 요약, 키워드 추출, 저사양 온디바이스 챗봇"
-      },
-      {
-        id: "exaone-7.8b",
-        name: "EXAONE 3.5 7.8B",
-        category: "korean",
-        categoryLabel: "한국어 특화",
-        params: 7.8,
-        desc: "국내 최상위권 한국어 문맥 이해도 & 공문서·보고서 작성 탁월. 실무 최고 추천",
-        cmd: "ollama run exaone3.5:7.8b",
-        recommendedFor: "한국어 비즈니스 보고서, 이메일 작성, 전문 한글 번역"
-      },
-      {
-        id: "exaone-32b",
-        name: "EXAONE 3.5 32B",
-        category: "korean",
-        categoryLabel: "한국어 특화",
-        params: 32,
-        desc: "LG의 대형 플래그십 모델. 한국어 법률·금융·사내 고난도 문서 정밀 분석",
-        cmd: "ollama run exaone3.5:32b",
-        recommendedFor: "전문 한국어 심층 리서치, 고난도 보고서 분석"
-      },
-
-      // 🧠 심층 추론 (DeepSeek R1 Reasoning Models)
-      {
-        id: "deepseek-r1-1.5b",
-        name: "DeepSeek-R1 Distill 1.5B",
-        category: "reasoning",
-        categoryLabel: "심층 추론",
-        params: 1.5,
-        desc: "추론 사고 과정(<think>)을 거치는 초경량 모델. 사양 부담 없이 생각하는 AI 체험",
-        cmd: "ollama run deepseek-r1:1.5b",
-        recommendedFor: "단순 논리 추론, 학생 수학 풀이 및 초저사양 테스트"
-      },
-      {
-        id: "deepseek-r1-8b",
-        name: "DeepSeek-R1 Distill 8B",
-        category: "reasoning",
-        categoryLabel: "심층 추론",
-        params: 8,
-        desc: "Llama 3.1 기반 R1 증류 모델. 수학, 코딩 논리, 단계별 심층 사고력 우수 (가성비 최강)",
-        cmd: "ollama run deepseek-r1:8b",
-        recommendedFor: "복잡한 문제 해결, 단계별 논리 전개, 알고리즘 분석"
-      },
-      {
-        id: "deepseek-r1-14b",
-        name: "DeepSeek-R1 Distill 14B",
-        category: "reasoning",
-        categoryLabel: "심층 추론",
-        params: 14,
-        desc: "Qwen 2.5 기반 R1 증류 모델. 수학 올림피아드급 문제 풀이 및 심층 코드 검증 탁월",
-        cmd: "ollama run deepseek-r1:14b",
-        recommendedFor: "고난도 수학/논리 문제, 전문 소프트웨어 아키텍처 설계"
-      },
-      {
-        id: "deepseek-r1-32b",
-        name: "DeepSeek-R1 Distill 32B",
-        category: "reasoning",
-        categoryLabel: "심층 추론",
-        params: 32,
-        desc: "OpenAI o1 수준에 근접한 압도적인 오픈 추론 성능. 오프라인 최고 수준의 지능",
-        cmd: "ollama run deepseek-r1:32b",
-        recommendedFor: "기업용 심층 의사결정 보조, 복잡한 법적·학술적 논증 검토"
-      },
-      {
-        id: "deepseek-r1-70b",
-        name: "DeepSeek-R1 Distill 70B",
-        category: "reasoning",
-        categoryLabel: "심층 추론",
-        params: 70,
-        desc: "현존 오픈소스 최상위 추론 성능. 고용량 VRAM(듀얼 GPU / Mac Max) 필수",
-        cmd: "ollama run deepseek-r1:70b",
-        recommendedFor: "유료 클라우드 모델을 완벽히 대체하는 최상급 오프라인 인텔리전스"
-      },
-
-      // 💻 코딩 & 실무 (Qwen 2.5)
-      {
-        id: "qwen-coder-7b",
-        name: "Qwen 2.5 Coder 7B",
-        category: "coding",
-        categoryLabel: "코딩 특화",
-        params: 7.6,
-        desc: "코딩 어시스턴트 1위(EvalPlus 벤치마크). VS Code 등과 연동해 로컬 Copilot 구축 최적",
-        cmd: "ollama run qwen2.5-coder:7b",
-        recommendedFor: "로컬 코드 자동완성, 버그 픽스, 단위 테스트 자동 작성"
-      },
-      {
-        id: "qwen-coder-14b",
-        name: "Qwen 2.5 Coder 14B",
-        category: "coding",
-        categoryLabel: "코딩 특화",
-        params: 14.7,
-        desc: "대규모 프로젝트 리팩토링, 복잡한 풀스택 코드 작성 실무 종결자",
-        cmd: "ollama run qwen2.5-coder:14b",
-        recommendedFor: "중대형 프로젝트 개발 지원, 복잡한 API 연동 및 설계"
-      },
-      {
-        id: "qwen-14b",
-        name: "Qwen 2.5 14B (범용)",
-        category: "coding",
-        categoryLabel: "코딩 & 실무",
-        params: 14.7,
-        desc: "다국어 이해도, 지식 검색, 구조화된 JSON 데이터 추출 최강 실무형 모델",
-        cmd: "ollama run qwen2.5:14b",
-        recommendedFor: "실무 문서 번역, 데이터 파싱, 사내 RAG 지식 검색"
-      },
-      {
-        id: "qwen-32b",
-        name: "Qwen 2.5 32B (고성능)",
-        category: "coding",
-        categoryLabel: "코딩 & 실무",
-        params: 32.5,
-        desc: "GPT-4o mini를 상회하는 종합 벤치마크 성능. 사내 서버나 고성능 PC 주력용",
-        cmd: "ollama run qwen2.5:32b",
-        recommendedFor: "사내 비공개 데이터 기반 프라이빗 LLM 솔루션"
-      },
-
-      // 🌐 글로벌 표준 (Llama 3 & Gemma 2)
-      {
-        id: "llama-3.2-3b",
-        name: "Llama 3.2 3B",
-        category: "standard",
-        categoryLabel: "글로벌 표준",
-        params: 3.2,
-        desc: "Meta의 최신 모바일·경량화 아키텍처. 찰나의 속도로 대화 및 요약 수행",
-        cmd: "ollama run llama3.2:3b",
-        recommendedFor: "실시간 대화 봇, 텍스트 분류, 임베디드 디바이스 구동"
-      },
-      {
-        id: "llama-3.1-8b",
-        name: "Llama 3.1 8B",
-        category: "standard",
-        categoryLabel: "글로벌 표준",
-        params: 8.0,
-        desc: "전 세계에서 가장 널리 쓰이는 오픈소스 AI의 기준점. 광범위한 툴과 호환",
-        cmd: "ollama run llama3.1:8b",
-        recommendedFor: "일반 업무 보조, 영문 라이팅, 표준 테스트 베드"
-      },
-      {
-        id: "gemma-2-9b",
-        name: "Gemma 2 9B",
-        category: "standard",
-        categoryLabel: "글로벌 표준",
-        params: 9.2,
-        desc: "구글(Google)의 강력한 경량 모델. 동급 대비 뛰어난 언어적 뉘앙스와 추론력",
-        cmd: "ollama run gemma2:9b",
-        recommendedFor: "창의적 글쓰기, 정밀한 팩트 체크 및 텍스트 정제"
-      },
-      {
-        id: "llama-3.3-70b",
-        name: "Llama 3.3 70B",
-        category: "standard",
-        categoryLabel: "글로벌 표준",
-        params: 70.6,
-        desc: "Meta의 이전 405B 초거대 모델의 성능을 70B 크기로 압축한 걸작",
-        cmd: "ollama run llama3.3:70b",
-        recommendedFor: "기업 엔터프라이즈급 AI, 고난도 연구 및 전문 분야 자문"
-      }
-    ];
-
-    let currentCategory = 'all';
-
-    const gpuPreset = document.getElementById('gpuPreset');
-    const quantLevel = document.getElementById('quantLevel');
-    const sysRam = document.getElementById('sysRam');
-    const vramSlider = document.getElementById('vramSlider');
-    const bwSlider = document.getElementById('bwSlider');
-    const tdpSlider = document.getElementById('tdpSlider');
-    const ctxSelect = document.getElementById('ctxSelect');
-
-    const vramVal = document.getElementById('vramVal');
-    const bwVal = document.getElementById('bwVal');
-    const tdpVal = document.getElementById('tdpVal');
-    const ctxVal = document.getElementById('ctxVal');
-    const modelTableBody = document.getElementById('modelTableBody');
-    const summaryBanner = document.getElementById('summaryBanner');
-    const catButtons = document.querySelectorAll('.cat-btn');
-
-    // 카테고리 탭 이벤트
-    catButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        catButtons.forEach(b => {
-          b.classList.remove('bg-indigo-600', 'text-white', 'shadow');
-          b.classList.add('text-slate-400');
-        });
-        btn.classList.add('bg-indigo-600', 'text-white', 'shadow');
-        btn.classList.remove('text-slate-400');
-        currentCategory = btn.dataset.cat;
-        calculate();
-      });
-    });
-
-    gpuPreset.addEventListener('change', (e) => {
-      if (e.target.value !== 'custom') {
-        const [vram, bw, tdp] = e.target.value.split(',').map(Number);
-        vramSlider.value = vram;
-        bwSlider.value = bw;
-        tdpSlider.value = tdp;
-        calculate();
-      }
-    });
-
-    [quantLevel, sysRam, vramSlider, bwSlider, tdpSlider, ctxSelect].forEach(el => {
-      el.addEventListener('input', (e) => {
-        if (['vramSlider', 'bwSlider', 'tdpSlider'].includes(e.target.id)) {
-          gpuPreset.value = 'custom';
-        }
-        calculate();
-      });
-    });
-
-    function applyMyPcSpecs() {
-      gpuPreset.value = "0,60,28";
-      vramSlider.value = 0;
-      bwSlider.value = 60;
-      tdpSlider.value = 28;
-      sysRam.value = "16";
-      quantLevel.value = "0.65";
-      ctxSelect.value = "4096";
-      calculate();
-
-      const btn = document.getElementById('applyMyPcBtn');
-      if (btn) {
-        const original = btn.innerHTML;
-        btn.innerHTML = `<span>✅</span> 내 PC 사양 적용됨!`;
-        btn.classList.add('ring-2', 'ring-emerald-400');
-        setTimeout(() => {
-          btn.innerHTML = original;
-          btn.classList.remove('ring-2', 'ring-emerald-400');
-        }, 2000);
-      }
-    }
-
-    function shareConfig(btn) {
-      const vram = vramSlider.value;
-      const bw = bwSlider.value;
-      const tdp = tdpSlider.value;
-      const ram = sysRam.value;
-      const ctx = ctxSelect.value;
-      const quant = quantLevel.value;
-      const url = `${window.location.origin}${window.location.pathname}?vram=${vram}&bw=${bw}&tdp=${tdp}&ram=${ram}&ctx=${ctx}&q=${quant}`;
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(() => showShareCopied(btn)).catch(() => fallbackCopy(url, btn));
-      } else {
-        fallbackCopy(url, btn);
-      }
-    }
-
-    function showShareCopied(btn) {
-      const original = btn.innerHTML;
-      btn.innerHTML = `<span>✅</span> 링크 복사완료!`;
-      btn.classList.add('text-emerald-400', 'border-emerald-500/50');
-      setTimeout(() => {
-        btn.innerHTML = original;
-        btn.classList.remove('text-emerald-400', 'border-emerald-500/50');
-      }, 2000);
-    }
-
-    function detectClientGpu() {
-      try {
-        const canvas = document.createElement('canvas');
-        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        if (gl) {
-          const ext = gl.getExtension('WEBGL_debug_renderer_info');
-          if (ext) {
-            const raw = gl.getParameter(ext.UNMASKED_RENDERER_WEBGL);
-            if (raw) {
-              const cleaned = raw.replace(/ANGLE \((.*?), (.*?), (.*?)\)/, '$2').replace(/Direct3D.*?vs_.*?ps_.*?/, '').trim();
-              const badge = document.getElementById('detectedGpuName');
-              const desc = document.getElementById('detectedGpuDesc');
-              const ram = navigator.deviceMemory ? navigator.deviceMemory + 'GB RAM' : '16GB RAM';
-              if (badge) {
-                badge.innerText = `${cleaned} · ${ram}`;
-              }
-              if (desc && /RTX|GeForce|Radeon|Arc/i.test(cleaned)) {
-                desc.innerHTML = `외장 그래픽(GPU) 기반으로 VRAM 초고속 메모리를 활용해 고성능 AI를 구동합니다.`;
-              }
-            }
-          }
-        }
-      } catch (e) {}
-    }
-
-    function loadFromUrlParams() {
-      const params = new URLSearchParams(window.location.search);
-      let loaded = false;
-      if (params.has('vram')) { vramSlider.value = params.get('vram'); loaded = true; }
-      if (params.has('bw')) { bwSlider.value = params.get('bw'); loaded = true; }
-      if (params.has('tdp')) { tdpSlider.value = params.get('tdp'); loaded = true; }
-      if (params.has('ram')) { sysRam.value = params.get('ram'); loaded = true; }
-      if (params.has('ctx')) { ctxSelect.value = params.get('ctx'); loaded = true; }
-      if (params.has('q')) { quantLevel.value = params.get('q'); loaded = true; }
-      if (loaded) {
-        gpuPreset.value = 'custom';
-      }
-    }
-
-    function copyCmd(cmd, btn) {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(cmd).then(() => showCopied(btn)).catch(() => fallbackCopy(cmd, btn));
-      } else {
-        fallbackCopy(cmd, btn);
-      }
-    }
-
-    function fallbackCopy(cmd, btn) {
-      const temp = document.createElement("input");
-      temp.value = cmd;
-      document.body.appendChild(temp);
-      temp.select();
-      document.execCommand("copy");
-      document.body.removeChild(temp);
-      showCopied(btn);
-    }
-
-    function showCopied(btn) {
-      const original = btn.innerHTML;
-      btn.innerHTML = `<span class="text-emerald-400 font-bold">복사완료!</span>`;
-      setTimeout(() => {
-        btn.innerHTML = original;
-      }, 1500);
-    }
-
-    function calculate() {
-      const vram = Number(vramSlider.value);
-      const bw = Number(bwSlider.value);
-      const tdp = Number(tdpSlider.value);
-      const quantMult = Number(quantLevel.value);
-      const ram = Number(sysRam.value);
-      const ctxTokens = Number(ctxSelect.value);
-
-      vramVal.innerText = `${vram} GB`;
-      bwVal.innerText = `${bw} GB/s`;
-      tdpVal.innerText = `${tdp} W`;
-      ctxVal.innerText = `${ctxTokens >= 1024 ? (ctxTokens / 1024) + 'K' : ctxTokens} 토큰`;
-
-      // KV 캐시 오버헤드 계산 (컨텍스트 길이에 비례)
-      // 기준: 4K 시 약 0.6GB, 8K 시 1.2GB, 16K 시 2.4GB, 32K 시 4.8GB (파라미터 크기 가중치 소폭 반영)
-      const baseKvCache = (ctxTokens / 8192) * 1.2;
-
-      // 가용 메모리 판정
-      const isIGPU = (vram === 0);
-      const availableRam = +(ram * 0.65).toFixed(1); // OS 및 기본 백그라운드 프로그램 제외한 LLM 할당 가용 RAM
-
-      let bestComfortableModel = null;
-      let maxSpeed = 0;
-      let rowsHtml = '';
-
-      // 필터링 적용
-      const filteredModels = models.filter(m => {
-        if (currentCategory === 'all') return true;
-        return m.category === currentCategory;
-      });
-
-      // 전체 모델 중에서 최적의 베스트 모델 찾기
-      models.forEach(m => {
-        const modelKv = +(baseKvCache * Math.sqrt(m.params / 8)).toFixed(2);
-        const reqMem = +(m.params * quantMult + modelKv).toFixed(1);
-        if (!isIGPU && vram >= reqMem) {
-          if (!bestComfortableModel || m.params > bestComfortableModel.params) {
-            bestComfortableModel = m;
-          }
-          const spd = Math.round((bw / reqMem) * 0.68);
-          if (spd > maxSpeed) maxSpeed = spd;
-        } else if (isIGPU && availableRam >= reqMem) {
-          const spd = Math.max(1, Math.round((bw / reqMem) * (m.params <= 3.5 ? 0.45 : 0.25)));
-          if (spd > maxSpeed) maxSpeed = spd;
-          // 내장 그래픽에서는 체감 반응 속도가 우수한 3.5B 이하 중에서 최대 모델 선택
-          if (m.params <= 3.5) {
-            if (!bestComfortableModel || m.params > bestComfortableModel.params) {
-              bestComfortableModel = m;
-            }
-          }
-        }
-      });
-
-      filteredModels.forEach(m => {
-        // 개별 모델의 정확한 KV 캐시 및 필요 VRAM 계산
-        const modelKv = +(baseKvCache * Math.sqrt(m.params / 8)).toFixed(2);
-        const modelWeight = +(m.params * quantMult).toFixed(1);
-        const reqVram = +(modelWeight + modelKv).toFixed(1);
-        
-        let status = '';
-        let badgeClass = '';
-        let estTokens = 0;
-        let memUsagePercent = 0;
-        let barColor = 'bg-emerald-500';
-
-        if (!isIGPU && vram >= reqVram) {
-          // VRAM 내 완전 구동
-          estTokens = Math.max(1, Math.round((bw / reqVram) * 0.68));
-          status = '쾌적 구동 (VRAM 100%)';
-          badgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
-          memUsagePercent = Math.min(100, Math.round((reqVram / Math.max(vram, 1)) * 100));
-          barColor = 'bg-emerald-400';
-        } else if (isIGPU && availableRam >= reqVram) {
-          // 내장 그래픽/CPU 전용 구동 (외장 VRAM 없음)
-          memUsagePercent = Math.min(100, Math.round((reqVram / availableRam) * 100));
-          if (m.params <= 3.5) {
-            estTokens = Math.max(1, Math.round((bw / reqVram) * 0.45));
-            status = 'CPU/내장 RAM 구동 (원활)';
-            badgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
-            barColor = 'bg-emerald-400';
-          } else {
-            estTokens = Math.max(1, Math.round((bw / reqVram) * 0.25));
-            status = 'CPU 구동 (타이핑 다소 느림)';
-            badgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
-            barColor = 'bg-amber-400';
-          }
-        } else if ((vram + ram * 0.65) >= reqVram) {
-          // 외장 GPU 일부 + 시스템 RAM 오프로딩 구동
-          const offloadRatio = Math.max(0, vram / reqVram);
-          const sysBw = 48; // DDR5/DDR4 실효 대역폭
-          const effectiveBw = (bw * offloadRatio) + (sysBw * (1 - offloadRatio));
-          estTokens = Math.max(1, Math.round((effectiveBw / reqVram) * 0.30));
-          status = '부분 오프로딩 (RAM 구동, 속도 저하)';
-          badgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
-          memUsagePercent = 100;
-          barColor = 'bg-amber-400';
-        } else {
-          // 구동 불가 (메모리 초과)
-          estTokens = 0;
-          status = '구동 불가 (메모리 초과)';
-          badgeClass = 'bg-rose-500/10 text-rose-400 border-rose-500/30';
-          memUsagePercent = 100;
-          barColor = 'bg-rose-500';
-        }
-
-        // 전력 효율 (와트당 토큰)
-        const tokenPerWatt = estTokens > 0 ? (estTokens / tdp).toFixed(2) : '0.00';
-
-        // 최적 추천 여부
-        const isBestFit = bestComfortableModel && bestComfortableModel.id === m.id;
-
-        rowsHtml += `
-          <tr class="hover:bg-slate-800/40 transition-colors duration-150 ${isBestFit ? 'bg-indigo-950/20' : ''}">
-            <td class="py-4 px-4">
-              <div class="flex items-center gap-2">
-                <span class="font-bold text-white text-base">${m.name}</span>
-                <span class="text-[11px] px-2 py-0.5 rounded-full font-medium ${
-                  m.category === 'korean' ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30' :
-                  m.category === 'reasoning' ? 'bg-purple-500/15 text-purple-300 border border-purple-500/30' :
-                  m.category === 'coding' ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30' :
-                  'bg-slate-700/40 text-slate-300 border border-slate-600/30'
-                }">${m.categoryLabel}</span>
-                ${isBestFit ? `<span class="text-[10px] bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold px-2 py-0.5 rounded-md shadow-sm animate-pulse">✨ 내 PC 최적픽</span>` : ''}
-              </div>
-              <div class="text-xs text-slate-400 mt-1 leading-normal">${m.desc}</div>
-              <div class="text-[11px] text-slate-500 mt-0.5">추천 용도: ${m.recommendedFor}</div>
-            </td>
-
-            <td class="py-4 px-3 font-mono">
-              <div class="text-slate-200 font-bold text-sm">${reqVram} GB</div>
-              <div class="text-[10px] text-slate-500 mt-0.5">가중치 ${modelWeight}G + KV ${modelKv}G</div>
-            </td>
-
-            <td class="py-4 px-3">
-              <div class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md border ${badgeClass}">
-                <span class="w-1.5 h-1.5 rounded-full ${estTokens >= 15 ? 'bg-emerald-400' : estTokens > 0 ? 'bg-amber-400' : 'bg-rose-400'}"></span>
-                ${status}
-              </div>
-              <div class="w-32 bg-slate-800 rounded-full h-1.5 mt-2 overflow-hidden">
-                <div class="${barColor} h-1.5 rounded-full" style="width: ${memUsagePercent}%"></div>
-              </div>
-              <div class="text-[10px] text-slate-500 mt-0.5 font-mono">
-                ${isIGPU ? `가용 RAM ${memUsagePercent}% 점유` : `VRAM ${memUsagePercent}% 점유`}
-              </div>
-            </td>
-
-            <td class="py-4 px-3">
-              <div class="font-bold font-mono text-base ${estTokens >= 20 ? 'text-indigo-400' : estTokens >= 8 ? 'text-emerald-400' : estTokens > 0 ? 'text-amber-400' : 'text-slate-600'}">
-                ${estTokens > 0 ? `약 ${estTokens} t/s` : '구동 불가'}
-              </div>
-              <div class="text-[11px] text-slate-400 mt-0.5">
-                ${estTokens >= 20 ? '⚡ 초고속' : estTokens >= 8 ? '🟢 체감 원활' : estTokens > 0 ? '🟠 타이핑 딜레이' : '❌ 메모리 부족'}
-              </div>
-            </td>
-
-            <td class="py-4 px-3 text-xs text-slate-300 font-mono">
-              ${estTokens > 0 ? `
-                <div class="text-indigo-300 font-medium">⚡ ${tokenPerWatt} t/W</div>
-                <div class="text-slate-500 text-[11px] mt-0.5">최대 약 ${tdp}W</div>
-              ` : `<span class="text-slate-600">-</span>`}
-            </td>
-
-            <td class="py-4 px-4">
-              <div class="flex items-center gap-1.5 bg-slate-950/90 px-3 py-1.5 rounded-lg border border-slate-800 group hover:border-slate-700 transition">
-                <code class="text-xs text-indigo-300 font-mono select-all truncate max-w-[150px] md:max-w-[190px]">${m.cmd}</code>
-                <button onclick="copyCmd('${m.cmd}', this)" class="text-xs text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 px-2 py-0.5 rounded transition flex-shrink-0 cursor-pointer">
-                  복사
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
-      });
-
-      modelTableBody.innerHTML = rowsHtml;
-
-      // 상단 요약 카드 업데이트 (한국 주택용 저압 1kWh 약 150원 기준 계산)
-      const hourlyCost = Math.round((tdp / 1000) * 150);
-      const bestName = bestComfortableModel ? bestComfortableModel.name : (isIGPU ? "없음 (RAM 부족)" : "없음 (VRAM 증설 필요)");
-      const bestDesc = isIGPU 
-        ? (bestComfortableModel ? `내장 그래픽(16GB RAM) 환경에서 딜레이 없이 가장 쾌적하게 작동하는 모델` : "현재 RAM 용량으로는 쾌적 구동이 어렵습니다.")
-        : (bestComfortableModel ? `VRAM ${vram}GB 이내 100% 탑재되는 최대 추천 모델` : "현재 VRAM 용량으로는 쾌적 구동 가능한 모델이 없습니다.");
-
-      summaryBanner.innerHTML = `
-        <div class="bg-gradient-to-br from-slate-900 to-slate-900/80 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-emerald-500/40 transition">
-          <div class="text-xs font-semibold text-emerald-400 mb-1 flex items-center gap-1.5">
-            <span>🎯</span> 내 PC 쾌적 구동 베스트 추천 모델
-          </div>
-          <div class="text-xl font-extrabold text-white tracking-tight mt-1 truncate">${bestName}</div>
-          <div class="text-xs text-slate-400 mt-1.5 leading-relaxed">${bestDesc}</div>
-        </div>
-
-        <div class="bg-gradient-to-br from-slate-900 to-slate-900/80 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-indigo-500/40 transition">
-          <div class="text-xs font-semibold text-indigo-400 mb-1 flex items-center gap-1.5">
-            <span>⚡</span> 최고 기대 응답 속도
-          </div>
-          <div class="text-xl font-extrabold text-white tracking-tight mt-1 font-mono">
-            ${maxSpeed > 0 ? `초당 최대 약 ${maxSpeed} 토큰` : '구동 불가'}
-          </div>
-          <div class="text-xs text-slate-400 mt-1.5 leading-relaxed">
-            ${maxSpeed >= 20 ? '사람 읽는 속도(15~20 t/s)를 여유 있게 상회하여 즉각 체감 가능' : '경량 모델 구동 기준 실효 속도'}
-          </div>
-        </div>
-
-        <div class="bg-gradient-to-br from-slate-900 to-slate-900/80 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-amber-500/40 transition">
-          <div class="text-xs font-semibold text-amber-400 mb-1 flex items-center gap-1.5">
-            <span>💡</span> 1시간 풀가동 시 예상 전기요금
-          </div>
-          <div class="text-xl font-extrabold text-white tracking-tight mt-1 font-mono">
-            약 ${hourlyCost}원 <span class="text-xs text-slate-400 font-normal">/ 시간</span>
-          </div>
-          <div class="text-xs text-slate-400 mt-1.5 leading-relaxed">
-            최대 전력(${tdp}W) 풀로드 기준 (가정용 한전 요금 kWh당 150원 환산)
-          </div>
-        </div>
-      `;
-    }
-
-    // 초기 실행
-    detectClientGpu();
-    loadFromUrlParams();
-    calculate();
-  </script>
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

@@ -7,3 +7,4 @@ dist/
 # Python
 __pycache__/
 *.pyc
+_backup_*/
