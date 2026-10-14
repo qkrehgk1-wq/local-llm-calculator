@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로컬 LLM 내 PC 맞춤 계산기 | AI 모델 구동 성능 & 속도 예측</title>
+  <meta name="description" content="내 컴퓨터 사양(GPU/VRAM/RAM)으로 구동 가능한 최적의 로컬 AI 모델(DeepSeek-R1, EXAONE 3.5, Qwen, Llama)과 예상 토큰 속도를 즉시 계산하세요.">
+  <meta property="og:title" content="로컬 LLM 내 PC 맞춤 계산기">
+  <meta property="og:description" content="내 컴퓨터 사양으로 구동 가능한 AI 모델과 예상 토큰 속도(t/s), 전력 효율을 즉시 계산합니다.">
+  <meta property="og:type" content="website">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
+    /* 커스텀 스크롤바 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8 antialiased selection:bg-indigo-500 selection:text-white">
+
+  <div class="max-w-6xl mx-auto">
+    <!-- 헤더 -->
+    <header class="mb-8 border-b border-slate-800 pb-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+        <div class="inline-flex items-center gap-2 bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-indigo-500/20 shadow-inner">
+          <span class="animate-pulse w-2 h-2 rounded-full bg-indigo-400"></span>
+          2026 최신 AI 규격 반영 (RTX 50 · DeepSeek-R1 · EXAONE 3.5)
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="shareConfig(this)" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 hover:text-white rounded-xl text-xs font-semibold border border-slate-700 transition cursor-pointer shadow-sm">
+            <span>🔗</span> 결과 링크 공유
+          </button>
+          <span class="text-xs text-slate-500 hidden sm:inline">v2.2 정식 출시판</span>
+        </div>
+      </div>
+      <h1 class="text-2xl md:text-4xl font-extrabold text-white tracking-tight mb-2.5">
+        내 PC 맞춤형 <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">로컬 LLM 구동 계산기</span>
+      </h1>
+      <p class="text-slate-400 text-sm md:text-base max-w-3xl leading-relaxed">
+        내 컴퓨터 그래픽카드(VRAM), 시스템 RAM, 문맥 길이(Context Window)를 선택하면
+        구동 가능한 최적 모델, 실제 예상 토큰 생성 속도(t/s), 전력 소모 및 전기세를 즉시 계산합니다.
+      </p>
+    </header>
+
+    <!-- 내 PC 스펙 감지 알림 배너 -->
+    <div class="bg-gradient-to-r from-indigo-950/70 via-purple-950/50 to-slate-900 border border-indigo-500/40 rounded-2xl p-4 md:p-5 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl relative overflow-hidden">
+      <div class="flex items-center gap-3.5">
+        <div class="p-3 bg-indigo-500/20 text-indigo-400 rounded-xl border border-indigo-500/30 text-2xl flex-shrink-0">
+          💻
+        </div>
+        <div>
+          <div class="text-xs text-indigo-300 font-bold flex items-center gap-2">
+            <span>현재 접속 중인 PC 스펙 감지됨</span>
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold">실제 하드웨어</span>
+          </div>
+          <div id="detectedGpuName" class="text-sm md:text-base font-extrabold text-white mt-0.5">
+            Intel 12세대 Core i5-1235U · Iris Xe 내장 그래픽 · 16GB RAM
+          </div>
+          <div id="detectedGpuDesc" class="text-xs text-slate-400 mt-0.5">
+            외장 GPU(RTX)가 없는 내장 그래픽 환경으로, <strong>CPU + 시스템 메모리(RAM)</strong>로 AI를 구동합니다.
+          </div>
+        </div>
+      </div>
+      <button id="applyMyPcBtn" onclick="applyMyPcSpecs()" class="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 active:scale-95 text-white text-xs font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-1.5 flex-shrink-0 cursor-pointer border border-indigo-400/30">
+        <span>⚡</span> 내 PC 사양으로 즉시 적용하기
+      </button>
+    </div>
+
+    <!-- 입력 섹션 -->
+    <section class="bg-slate-900/90 backdrop-blur border border-slate-800 rounded-2xl p-5 md:p-7 mb-8 shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-24 -right-24 w-72 h-72 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+          <span class="text-xl">💻</span> 1. 하드웨어 스펙 및 환경 설정
+        </h2>
+        <span class="text-xs text-indigo-300/80 bg-indigo-950/60 px-2.5 py-1 rounded-md border border-indigo-800/40">실시간 연동 계산</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <!-- GPU 프리셋 -->
+        <div class="lg:col-span-2">
+          <label class="block text-xs font-medium text-slate-300 mb-1.5 flex items-center justify-between">
+            <span>그래픽카드 (GPU / Apple Silicon)</span>
+            <span class="text-[11px] text-slate-500">선택 시 하단 슬라이더 자동 동기화</span>
+          </label>
+          <select id="gpuPreset" class="w-full bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm shadow-sm transition">
+            <optgroup label="📍 감지된 내 실제 PC">
+              <option value="0,60,28" id="myPcOption" selected>내 현재 PC (Intel Core i5-1235U · Iris Xe · 16GB RAM)</option>
+            </optgroup>
+            <optgroup label="⚡ NVIDIA GeForce RTX 50 시리즈 (신규 Blackwell)">
+              <option value="32,1792,600">RTX 5090 (VRAM 32GB · 1,792 GB/s · 600W)</option>
+              <option value="16,1000,400">RTX 5080 (VRAM 16GB · 1,000 GB/s · 400W)</option>
+              <option value="16,896,300">RTX 5070 Ti (VRAM 16GB · 896 GB/s · 300W)</option>
+              <option value="12,672,250">RTX 5070 (VRAM 12GB · 672 GB/s · 250W)</option>
+            </optgroup>
+            <optgroup label="🚀 NVIDIA GeForce RTX 40 시리즈">
+              <option value="24,1008,450">RTX 4090 (VRAM 24GB · 1,008 GB/s · 450W)</option>
+              <option value="16,736,320">RTX 4080 / 4080 Super (VRAM 16GB · 736 GB/s · 320W)</option>
+              <option value="16,672,285">RTX 4070 Ti Super (VRAM 16GB · 672 GB/s · 285W)</option>
+              <option value="12,504,200">RTX 4070 / 4070 Super (VRAM 12GB · 504 GB/s · 200W)</option>
+              <option value="16,288,165">RTX 4060 Ti 16GB (VRAM 16GB · 288 GB/s · 165W)</option>
+              <option value="8,272,115">RTX 4060 / 4060 Ti 8GB (VRAM 8GB · 272 GB/s · 115W)</option>
+            </optgroup>
+            <optgroup label="🔥 NVIDIA GeForce RTX 30 시리즈">
+              <option value="24,936,350">RTX 3090 / 3090 Ti (VRAM 24GB · 936 GB/s · 350W)</option>
+              <option value="12,912,350">RTX 3080 Ti / 3080 12GB (VRAM 12GB · 912 GB/s · 350W)</option>
+              <option value="10,760,320">RTX 3080 10GB (VRAM 10GB · 760 GB/s · 320W)</option>
+              <option value="12,360,170">RTX 3060 12GB (VRAM 12GB · 가성비 입문 추천 · 170W)</option>
+              <option value="8,448,220">RTX 3070 / 3060 Ti (VRAM 8GB · 448 GB/s · 220W)</option>
+            </optgroup>
+            <optgroup label="🔴 AMD Radeon RX 7000 시리즈">
+              <option value="24,960,355">Radeon RX 7900 XTX (VRAM 24GB · 960 GB/s · 355W)</option>
+              <option value="20,800,315">Radeon RX 7900 XT (VRAM 20GB · 800 GB/s · 315W)</option>
+              <option value="16,624,263">Radeon RX 7800 XT (VRAM 16GB · 624 GB/s · 263W)</option>
+              <option value="16,288,190">Radeon RX 7600 XT (VRAM 16GB · 288 GB/s · 190W)</option>
+            </optgroup>
+            <optgroup label="🍏 Apple Silicon (통합 메모리 Mac)">
+              <option value="16,120,30">Mac M2 / M3 / M4 기본형 (통합 16GB · ~120 GB/s)</option>
+              <option value="24,150,35">Mac M3 / M4 Pro 실속형 (통합 24GB · ~150 GB/s)</option>
+              <option value="36,273,45">Mac M3 / M4 Pro 고급형 (통합 36GB · ~273 GB/s)</option>
+              <option value="48,300,60">Mac M3 / M4 Max 48GB (통합 48GB · ~300 GB/s)</option>
+              <option value="64,400,75">Mac M2 / M3 / M4 Max 64GB (통합 64GB · ~400 GB/s)</option>
+              <option value="128,800,120">Mac M1 / M2 Ultra (통합 128GB · ~800 GB/s)</option>
+            </optgroup>
+            <optgroup label="🛠️ 내장 그래픽 / 직접 입력">
+              <option value="16,560,225">Intel Arc A770 16GB (VRAM 16GB · 560 GB/s · 225W)</option>
+              <option value="0,60,65">외장 GPU 없음 (일반 데스크탑 CPU + RAM)</option>
+              <option value="custom">직접 수치 입력 (하단 슬라이더 조절)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- 양자화 기준 -->
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1.5">모델 양자화 (압축률)</label>
+          <select id="quantLevel" class="w-full bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm shadow-sm transition">
+            <option value="0.55">3-bit (Q3_K_M - 초절약, 품질 다소 저하)</option>
+            <option value="0.65" selected>4-bit (Q4_K_M - 표준 권장, 성능/품질 균형)</option>
+            <option value="0.80">5-bit (Q5_K_M - 고품질 지능 유지)</option>
+            <option value="0.95">6-bit (Q6_K - 초고품질)</option>
+            <option value="1.15">8-bit (Q8_0 - 원본 FP16에 가장 근접)</option>
+          </select>
+        </div>
+
+        <!-- 시스템 RAM -->
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1.5">시스템 메모리 (RAM)</label>
+          <select id="sysRam" class="w-full bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm shadow-sm transition">
+            <option value="8">8 GB (최소사양)</option>
+            <option value="16" selected>16 GB (내 PC 장착 RAM)</option>
+            <option value="32">32 GB (표준 권장)</option>
+            <option value="64">64 GB (오프로딩 원활)</option>
+            <option value="128">128 GB (대형 모델 오프로딩)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 세부 스펙 조절 및 문맥 길이 -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4 border-t border-slate-800/80 text-sm">
+        <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/70">
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-slate-400 text-xs">VRAM (그래픽 메모리)</span>
+            <span id="vramVal" class="text-indigo-400 font-bold font-mono">0 GB</span>
+          </div>
+          <input type="range" id="vramSlider" min="0" max="128" step="1" value="0" class="w-full accent-indigo-500 cursor-pointer">
+          <div class="flex justify-between text-[10px] text-slate-500 mt-1"><span>0GB(내장)</span><span>64GB</span><span>128GB</span></div>
+        </div>
+
+        <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/70">
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-slate-400 text-xs">메모리 대역폭 (속도 결정)</span>
+            <span id="bwVal" class="text-indigo-400 font-bold font-mono">60 GB/s</span>
+          </div>
+          <input type="range" id="bwSlider" min="40" max="2000" step="10" value="60" class="w-full accent-indigo-500 cursor-pointer">
+          <div class="flex justify-between text-[10px] text-slate-500 mt-1"><span>40 GB/s</span><span>1000</span><span>2000 GB/s</span></div>
+        </div>
+
+        <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/70">
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-slate-400 text-xs">최대 소비전력 (TDP)</span>
+            <span id="tdpVal" class="text-indigo-400 font-bold font-mono">28 W</span>
+          </div>
+          <input type="range" id="tdpSlider" min="20" max="650" step="10" value="28" class="w-full accent-indigo-500 cursor-pointer">
+          <div class="flex justify-between text-[10px] text-slate-500 mt-1"><span>20W</span><span>350W</span><span>650W</span></div>
+        </div>
+
+        <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/70">
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-slate-400 text-xs">문맥 길이 (Context Window)</span>
+            <span id="ctxVal" class="text-pink-400 font-bold font-mono">4K 토큰</span>
+          </div>
+          <select id="ctxSelect" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 mt-0.5">
+            <option value="4096" selected>4K (기본 대화 / ~0.6GB / 16GB RAM 추천)</option>
+            <option value="8192">8K (일반 업무·문서 요약 / ~1.2GB)</option>
+            <option value="16384">16K (코드베이스 및 긴 회의록 / ~2.4GB)</option>
+            <option value="32768">32K (전문 서적·대용량 RAG / ~4.8GB)</option>
+          </select>
+          <div class="text-[10px] text-slate-500 mt-1">*KV 캐시가 시스템 메모리에 할당됨</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 요약 배지 -->
+    <section id="summaryBanner" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <!-- JS로 동적 렌더링 -->
+    </section>
+
+    <!-- 모델 리스트 및 필터 -->
+    <section class="bg-slate-900 border border-slate-800 rounded-2xl p-5 md:p-7 shadow-2xl">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-5 gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>📊</span> 2. 모델별 구동 판정 및 체감 성능 분석
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            * 초당 15~20 토큰 이상이면 사람의 읽는 속도(독서 속도)보다 빨라 실무에서 끊김 없이 쾌적하게 사용 가능합니다.
+          </p>
+        </div>
+
+        <!-- 카테고리 탭 필터 -->
+        <div class="flex flex-wrap gap-1.5 bg-slate-950/80 p-1.5 rounded-xl border border-slate-800/80 self-start lg:self-auto">
+          <button class="cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition active bg-indigo-600 text-white shadow" data-cat="all">전체 모델</button>
+          <button class="cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-400 hover:text-white" data-cat="korean">🇰🇷 한국어 (EXAONE)</button>
+          <button class="cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-400 hover:text-white" data-cat="reasoning">🧠 심층 추론 (DeepSeek-R1)</button>
+          <button class="cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-400 hover:text-white" data-cat="coding">💻 코딩·실무 (Qwen)</button>
+          <button class="cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-400 hover:text-white" data-cat="standard">🌐 글로벌 표준 (Llama 3)</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse min-w-[760px]">
+          <thead>
+            <tr class="border-b border-slate-800 text-xs text-slate-400 uppercase tracking-wider bg-slate-950/40">
+              <th class="py-3.5 px-4 rounded-l-lg">모델 정보 및 특화 분야</th>
+              <th class="py-3.5 px-3">필요 VRAM</th>
+              <th class="py-3.5 px-3">구동 판정 및 메모리 할당</th>
+              <th class="py-3.5 px-3">예상 속도 (Token/s)</th>
+              <th class="py-3.5 px-3">전력 효율</th>
+              <th class="py-3.5 px-4 rounded-r-lg">Ollama 간편 실행 명령어</th>
+            </tr>
+          </thead>
+          <tbody id="modelTableBody" class="divide-y divide-slate-800/60 text-sm">
+            <!-- JS로 동적 렌더링 -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 하단 안내 박스 -->
+      <div class="mt-6 pt-5 border-t border-slate-800/80 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-400">
+        <div class="bg-slate-950/50 p-3.5 rounded-xl border border-slate-800/60">
+          <div class="font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
+            <span class="text-emerald-400">●</span> 쾌적 구동 (VRAM 100%) vs 부분 오프로딩
+          </div>
+          <p class="leading-relaxed">
+            모델 파라미터와 KV 캐시가 그래픽카드 VRAM 내에 전부 상주하면 GPU의 수백~수천 GB/s 초고속 대역폭을 온전히 누려 최대 속도가 나옵니다.
+            VRAM 용량을 넘어가 시스템 일반 RAM으로 일부 레이어가 넘어가면 PCIe 대역폭 병목으로 속도가 1/5~1/20 수준으로 급감합니다.
+          </p>
+        </div>
+        <div class="bg-slate-950/50 p-3.5 rounded-xl border border-slate-800/60">
+          <div class="font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
+            <span class="text-indigo-400">●</span> Ollama 원클릭 설치 및 실행 가이드
+          </div>
+          <p class="leading-relaxed">
+            공식 홈페이지(<a href="https://ollama.com" target="_blank" class="text-indigo-400 underline hover:text-indigo-300">ollama.com</a>)에서 설치 후
+            터미널(PowerShell 또는 CMD)에 표의 <strong>[복사]</strong> 버튼을 누른 후 붙여넣기만 하면 AI 모델 자동 다운로드 및 대화가 바로 시작됩니다.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // 풍부해진 모델 카탈로그 (EXAONE 3.5, DeepSeek-R1 시리즈, Qwen 2.5, Llama 3.2/3.3, Gemma 2 등)
+    const models = [
+      // 🇰🇷 한국어 특화 (EXAONE 3.5 & 한국어 모델)
+      {
+        id: "exaone-2.4b",
+        name: "EXAONE 3.5 2.4B",
+        category: "korean",
+        categoryLabel: "한국어 특화",
+        params: 2.4,
+        desc: "LG AI연구원 공개 한국어 특화 초경량 모델. 노트북/저사양 PC에서도 눈 깜빡할 속도",
+        cmd: "ollama run exaone3.5:2.4b",
+        recommendedFor: "간단한 한국어 요약, 키워드 추출, 저사양 온디바이스 챗봇"
+      },
+      {
+        id: "exaone-7.8b",
+        name: "EXAONE 3.5 7.8B",
+        category: "korean",
+        categoryLabel: "한국어 특화",
+        params: 7.8,
+        desc: "국내 최상위권 한국어 문맥 이해도 & 공문서·보고서 작성 탁월. 실무 최고 추천",
+        cmd: "ollama run exaone3.5:7.8b",
+        recommendedFor: "한국어 비즈니스 보고서, 이메일 작성, 전문 한글 번역"
+      },
+      {
+        id: "exaone-32b",
+        name: "EXAONE 3.5 32B",
+        category: "korean",
+        categoryLabel: "한국어 특화",
+        params: 32,
+        desc: "LG의 대형 플래그십 모델. 한국어 법률·금융·사내 고난도 문서 정밀 분석",
+        cmd: "ollama run exaone3.5:32b",
+        recommendedFor: "전문 한국어 심층 리서치, 고난도 보고서 분석"
+      },
+
+      // 🧠 심층 추론 (DeepSeek R1 Reasoning Models)
+      {
+        id: "deepseek-r1-1.5b",
+        name: "DeepSeek-R1 Distill 1.5B",
+        category: "reasoning",
+        categoryLabel: "심층 추론",
+        params: 1.5,
+        desc: "추론 사고 과정(<think>)을 거치는 초경량 모델. 사양 부담 없이 생각하는 AI 체험",
+        cmd: "ollama run deepseek-r1:1.5b",
+        recommendedFor: "단순 논리 추론, 학생 수학 풀이 및 초저사양 테스트"
+      },
+      {
+        id: "deepseek-r1-8b",
+        name: "DeepSeek-R1 Distill 8B",
+        category: "reasoning",
+        categoryLabel: "심층 추론",
+        params: 8,
+        desc: "Llama 3.1 기반 R1 증류 모델. 수학, 코딩 논리, 단계별 심층 사고력 우수 (가성비 최강)",
+        cmd: "ollama run deepseek-r1:8b",
+        recommendedFor: "복잡한 문제 해결, 단계별 논리 전개, 알고리즘 분석"
+      },
+      {
+        id: "deepseek-r1-14b",
+        name: "DeepSeek-R1 Distill 14B",
+        category: "reasoning",
+        categoryLabel: "심층 추론",
+        params: 14,
+        desc: "Qwen 2.5 기반 R1 증류 모델. 수학 올림피아드급 문제 풀이 및 심층 코드 검증 탁월",
+        cmd: "ollama run deepseek-r1:14b",
+        recommendedFor: "고난도 수학/논리 문제, 전문 소프트웨어 아키텍처 설계"
+      },
+      {
+        id: "deepseek-r1-32b",
+        name: "DeepSeek-R1 Distill 32B",
+        category: "reasoning",
+        categoryLabel: "심층 추론",
+        params: 32,
+        desc: "OpenAI o1 수준에 근접한 압도적인 오픈 추론 성능. 오프라인 최고 수준의 지능",
+        cmd: "ollama run deepseek-r1:32b",
+        recommendedFor: "기업용 심층 의사결정 보조, 복잡한 법적·학술적 논증 검토"
+      },
+      {
+        id: "deepseek-r1-70b",
+        name: "DeepSeek-R1 Distill 70B",
+        category: "reasoning",
+        categoryLabel: "심층 추론",
+        params: 70,
+        desc: "현존 오픈소스 최상위 추론 성능. 고용량 VRAM(듀얼 GPU / Mac Max) 필수",
+        cmd: "ollama run deepseek-r1:70b",
+        recommendedFor: "유료 클라우드 모델을 완벽히 대체하는 최상급 오프라인 인텔리전스"
+      },
+
+      // 💻 코딩 & 실무 (Qwen 2.5)
+      {
+        id: "qwen-coder-7b",
+        name: "Qwen 2.5 Coder 7B",
+        category: "coding",
+        categoryLabel: "코딩 특화",
+        params: 7.6,
+        desc: "코딩 어시스턴트 1위(EvalPlus 벤치마크). VS Code 등과 연동해 로컬 Copilot 구축 최적",
+        cmd: "ollama run qwen2.5-coder:7b",
+        recommendedFor: "로컬 코드 자동완성, 버그 픽스, 단위 테스트 자동 작성"
+      },
+      {
+        id: "qwen-coder-14b",
+        name: "Qwen 2.5 Coder 14B",
+        category: "coding",
+        categoryLabel: "코딩 특화",
+        params: 14.7,
+        desc: "대규모 프로젝트 리팩토링, 복잡한 풀스택 코드 작성 실무 종결자",
+        cmd: "ollama run qwen2.5-coder:14b",
+        recommendedFor: "중대형 프로젝트 개발 지원, 복잡한 API 연동 및 설계"
+      },
+      {
+        id: "qwen-14b",
+        name: "Qwen 2.5 14B (범용)",
+        category: "coding",
+        categoryLabel: "코딩 & 실무",
+        params: 14.7,
+        desc: "다국어 이해도, 지식 검색, 구조화된 JSON 데이터 추출 최강 실무형 모델",
+        cmd: "ollama run qwen2.5:14b",
+        recommendedFor: "실무 문서 번역, 데이터 파싱, 사내 RAG 지식 검색"
+      },
+      {
+        id: "qwen-32b",
+        name: "Qwen 2.5 32B (고성능)",
+        category: "coding",
+        categoryLabel: "코딩 & 실무",
+        params: 32.5,
+        desc: "GPT-4o mini를 상회하는 종합 벤치마크 성능. 사내 서버나 고성능 PC 주력용",
+        cmd: "ollama run qwen2.5:32b",
+        recommendedFor: "사내 비공개 데이터 기반 프라이빗 LLM 솔루션"
+      },
+
+      // 🌐 글로벌 표준 (Llama 3 & Gemma 2)
+      {
+        id: "llama-3.2-3b",
+        name: "Llama 3.2 3B",
+        category: "standard",
+        categoryLabel: "글로벌 표준",
+        params: 3.2,
+        desc: "Meta의 최신 모바일·경량화 아키텍처. 찰나의 속도로 대화 및 요약 수행",
+        cmd: "ollama run llama3.2:3b",
+        recommendedFor: "실시간 대화 봇, 텍스트 분류, 임베디드 디바이스 구동"
+      },
+      {
+        id: "llama-3.1-8b",
+        name: "Llama 3.1 8B",
+        category: "standard",
+        categoryLabel: "글로벌 표준",
+        params: 8.0,
+        desc: "전 세계에서 가장 널리 쓰이는 오픈소스 AI의 기준점. 광범위한 툴과 호환",
+        cmd: "ollama run llama3.1:8b",
+        recommendedFor: "일반 업무 보조, 영문 라이팅, 표준 테스트 베드"
+      },
+      {
+        id: "gemma-2-9b",
+        name: "Gemma 2 9B",
+        category: "standard",
+        categoryLabel: "글로벌 표준",
+        params: 9.2,
+        desc: "구글(Google)의 강력한 경량 모델. 동급 대비 뛰어난 언어적 뉘앙스와 추론력",
+        cmd: "ollama run gemma2:9b",
+        recommendedFor: "창의적 글쓰기, 정밀한 팩트 체크 및 텍스트 정제"
+      },
+      {
+        id: "llama-3.3-70b",
+        name: "Llama 3.3 70B",
+        category: "standard",
+        categoryLabel: "글로벌 표준",
+        params: 70.6,
+        desc: "Meta의 이전 405B 초거대 모델의 성능을 70B 크기로 압축한 걸작",
+        cmd: "ollama run llama3.3:70b",
+        recommendedFor: "기업 엔터프라이즈급 AI, 고난도 연구 및 전문 분야 자문"
+      }
+    ];
+
+    let currentCategory = 'all';
+
+    const gpuPreset = document.getElementById('gpuPreset');
+    const quantLevel = document.getElementById('quantLevel');
+    const sysRam = document.getElementById('sysRam');
+    const vramSlider = document.getElementById('vramSlider');
+    const bwSlider = document.getElementById('bwSlider');
+    const tdpSlider = document.getElementById('tdpSlider');
+    const ctxSelect = document.getElementById('ctxSelect');
+
+    const vramVal = document.getElementById('vramVal');
+    const bwVal = document.getElementById('bwVal');
+    const tdpVal = document.getElementById('tdpVal');
+    const ctxVal = document.getElementById('ctxVal');
+    const modelTableBody = document.getElementById('modelTableBody');
+    const summaryBanner = document.getElementById('summaryBanner');
+    const catButtons = document.querySelectorAll('.cat-btn');
+
+    // 카테고리 탭 이벤트
+    catButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        catButtons.forEach(b => {
+          b.classList.remove('bg-indigo-600', 'text-white', 'shadow');
+          b.classList.add('text-slate-400');
+        });
+        btn.classList.add('bg-indigo-600', 'text-white', 'shadow');
+        btn.classList.remove('text-slate-400');
+        currentCategory = btn.dataset.cat;
+        calculate();
+      });
+    });
+
+    gpuPreset.addEventListener('change', (e) => {
+      if (e.target.value !== 'custom') {
+        const [vram, bw, tdp] = e.target.value.split(',').map(Number);
+        vramSlider.value = vram;
+        bwSlider.value = bw;
+        tdpSlider.value = tdp;
+        calculate();
+      }
+    });
+
+    [quantLevel, sysRam, vramSlider, bwSlider, tdpSlider, ctxSelect].forEach(el => {
+      el.addEventListener('input', (e) => {
+        if (['vramSlider', 'bwSlider', 'tdpSlider'].includes(e.target.id)) {
+          gpuPreset.value = 'custom';
+        }
+        calculate();
+      });
+    });
+
+    function applyMyPcSpecs() {
+      gpuPreset.value = "0,60,28";
+      vramSlider.value = 0;
+      bwSlider.value = 60;
+      tdpSlider.value = 28;
+      sysRam.value = "16";
+      quantLevel.value = "0.65";
+      ctxSelect.value = "4096";
+      calculate();
+
+      const btn = document.getElementById('applyMyPcBtn');
+      if (btn) {
+        const original = btn.innerHTML;
+        btn.innerHTML = `<span>✅</span> 내 PC 사양 적용됨!`;
+        btn.classList.add('ring-2', 'ring-emerald-400');
+        setTimeout(() => {
+          btn.innerHTML = original;
+          btn.classList.remove('ring-2', 'ring-emerald-400');
+        }, 2000);
+      }
+    }
+
+    function shareConfig(btn) {
+      const vram = vramSlider.value;
+      const bw = bwSlider.value;
+      const tdp = tdpSlider.value;
+      const ram = sysRam.value;
+      const ctx = ctxSelect.value;
+      const quant = quantLevel.value;
+      const url = `${window.location.origin}${window.location.pathname}?vram=${vram}&bw=${bw}&tdp=${tdp}&ram=${ram}&ctx=${ctx}&q=${quant}`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => showShareCopied(btn)).catch(() => fallbackCopy(url, btn));
+      } else {
+        fallbackCopy(url, btn);
+      }
+    }
+
+    function showShareCopied(btn) {
+      const original = btn.innerHTML;
+      btn.innerHTML = `<span>✅</span> 링크 복사완료!`;
+      btn.classList.add('text-emerald-400', 'border-emerald-500/50');
+      setTimeout(() => {
+        btn.innerHTML = original;
+        btn.classList.remove('text-emerald-400', 'border-emerald-500/50');
+      }, 2000);
+    }
+
+    function detectClientGpu() {
+      try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (gl) {
+          const ext = gl.getExtension('WEBGL_debug_renderer_info');
+          if (ext) {
+            const raw = gl.getParameter(ext.UNMASKED_RENDERER_WEBGL);
+            if (raw) {
+              const cleaned = raw.replace(/ANGLE \((.*?), (.*?), (.*?)\)/, '$2').replace(/Direct3D.*?vs_.*?ps_.*?/, '').trim();
+              const badge = document.getElementById('detectedGpuName');
+              const desc = document.getElementById('detectedGpuDesc');
+              const ram = navigator.deviceMemory ? navigator.deviceMemory + 'GB RAM' : '16GB RAM';
+              if (badge) {
+                badge.innerText = `${cleaned} · ${ram}`;
+              }
+              if (desc && /RTX|GeForce|Radeon|Arc/i.test(cleaned)) {
+                desc.innerHTML = `외장 그래픽(GPU) 기반으로 VRAM 초고속 메모리를 활용해 고성능 AI를 구동합니다.`;
+              }
+            }
+          }
+        }
+      } catch (e) {}
+    }
+
+    function loadFromUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      let loaded = false;
+      if (params.has('vram')) { vramSlider.value = params.get('vram'); loaded = true; }
+      if (params.has('bw')) { bwSlider.value = params.get('bw'); loaded = true; }
+      if (params.has('tdp')) { tdpSlider.value = params.get('tdp'); loaded = true; }
+      if (params.has('ram')) { sysRam.value = params.get('ram'); loaded = true; }
+      if (params.has('ctx')) { ctxSelect.value = params.get('ctx'); loaded = true; }
+      if (params.has('q')) { quantLevel.value = params.get('q'); loaded = true; }
+      if (loaded) {
+        gpuPreset.value = 'custom';
+      }
+    }
+
+    function copyCmd(cmd, btn) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cmd).then(() => showCopied(btn)).catch(() => fallbackCopy(cmd, btn));
+      } else {
+        fallbackCopy(cmd, btn);
+      }
+    }
+
+    function fallbackCopy(cmd, btn) {
+      const temp = document.createElement("input");
+      temp.value = cmd;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand("copy");
+      document.body.removeChild(temp);
+      showCopied(btn);
+    }
+
+    function showCopied(btn) {
+      const original = btn.innerHTML;
+      btn.innerHTML = `<span class="text-emerald-400 font-bold">복사완료!</span>`;
+      setTimeout(() => {
+        btn.innerHTML = original;
+      }, 1500);
+    }
+
+    function calculate() {
+      const vram = Number(vramSlider.value);
+      const bw = Number(bwSlider.value);
+      const tdp = Number(tdpSlider.value);
+      const quantMult = Number(quantLevel.value);
+      const ram = Number(sysRam.value);
+      const ctxTokens = Number(ctxSelect.value);
+
+      vramVal.innerText = `${vram} GB`;
+      bwVal.innerText = `${bw} GB/s`;
+      tdpVal.innerText = `${tdp} W`;
+      ctxVal.innerText = `${ctxTokens >= 1024 ? (ctxTokens / 1024) + 'K' : ctxTokens} 토큰`;
+
+      // KV 캐시 오버헤드 계산 (컨텍스트 길이에 비례)
+      // 기준: 4K 시 약 0.6GB, 8K 시 1.2GB, 16K 시 2.4GB, 32K 시 4.8GB (파라미터 크기 가중치 소폭 반영)
+      const baseKvCache = (ctxTokens / 8192) * 1.2;
+
+      // 가용 메모리 판정
+      const isIGPU = (vram === 0);
+      const availableRam = +(ram * 0.65).toFixed(1); // OS 및 기본 백그라운드 프로그램 제외한 LLM 할당 가용 RAM
+
+      let bestComfortableModel = null;
+      let maxSpeed = 0;
+      let rowsHtml = '';
+
+      // 필터링 적용
+      const filteredModels = models.filter(m => {
+        if (currentCategory === 'all') return true;
+        return m.category === currentCategory;
+      });
+
+      // 전체 모델 중에서 최적의 베스트 모델 찾기
+      models.forEach(m => {
+        const modelKv = +(baseKvCache * Math.sqrt(m.params / 8)).toFixed(2);
+        const reqMem = +(m.params * quantMult + modelKv).toFixed(1);
+        if (!isIGPU && vram >= reqMem) {
+          if (!bestComfortableModel || m.params > bestComfortableModel.params) {
+            bestComfortableModel = m;
+          }
+          const spd = Math.round((bw / reqMem) * 0.68);
+          if (spd > maxSpeed) maxSpeed = spd;
+        } else if (isIGPU && availableRam >= reqMem) {
+          const spd = Math.max(1, Math.round((bw / reqMem) * (m.params <= 3.5 ? 0.45 : 0.25)));
+          if (spd > maxSpeed) maxSpeed = spd;
+          // 내장 그래픽에서는 체감 반응 속도가 우수한 3.5B 이하 중에서 최대 모델 선택
+          if (m.params <= 3.5) {
+            if (!bestComfortableModel || m.params > bestComfortableModel.params) {
+              bestComfortableModel = m;
+            }
+          }
+        }
+      });
+
+      filteredModels.forEach(m => {
+        // 개별 모델의 정확한 KV 캐시 및 필요 VRAM 계산
+        const modelKv = +(baseKvCache * Math.sqrt(m.params / 8)).toFixed(2);
+        const modelWeight = +(m.params * quantMult).toFixed(1);
+        const reqVram = +(modelWeight + modelKv).toFixed(1);
+        
+        let status = '';
+        let badgeClass = '';
+        let estTokens = 0;
+        let memUsagePercent = 0;
+        let barColor = 'bg-emerald-500';
+
+        if (!isIGPU && vram >= reqVram) {
+          // VRAM 내 완전 구동
+          estTokens = Math.max(1, Math.round((bw / reqVram) * 0.68));
+          status = '쾌적 구동 (VRAM 100%)';
+          badgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+          memUsagePercent = Math.min(100, Math.round((reqVram / Math.max(vram, 1)) * 100));
+          barColor = 'bg-emerald-400';
+        } else if (isIGPU && availableRam >= reqVram) {
+          // 내장 그래픽/CPU 전용 구동 (외장 VRAM 없음)
+          memUsagePercent = Math.min(100, Math.round((reqVram / availableRam) * 100));
+          if (m.params <= 3.5) {
+            estTokens = Math.max(1, Math.round((bw / reqVram) * 0.45));
+            status = 'CPU/내장 RAM 구동 (원활)';
+            badgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+            barColor = 'bg-emerald-400';
+          } else {
+            estTokens = Math.max(1, Math.round((bw / reqVram) * 0.25));
+            status = 'CPU 구동 (타이핑 다소 느림)';
+            badgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+            barColor = 'bg-amber-400';
+          }
+        } else if ((vram + ram * 0.65) >= reqVram) {
+          // 외장 GPU 일부 + 시스템 RAM 오프로딩 구동
+          const offloadRatio = Math.max(0, vram / reqVram);
+          const sysBw = 48; // DDR5/DDR4 실효 대역폭
+          const effectiveBw = (bw * offloadRatio) + (sysBw * (1 - offloadRatio));
+          estTokens = Math.max(1, Math.round((effectiveBw / reqVram) * 0.30));
+          status = '부분 오프로딩 (RAM 구동, 속도 저하)';
+          badgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+          memUsagePercent = 100;
+          barColor = 'bg-amber-400';
+        } else {
+          // 구동 불가 (메모리 초과)
+          estTokens = 0;
+          status = '구동 불가 (메모리 초과)';
+          badgeClass = 'bg-rose-500/10 text-rose-400 border-rose-500/30';
+          memUsagePercent = 100;
+          barColor = 'bg-rose-500';
+        }
+
+        // 전력 효율 (와트당 토큰)
+        const tokenPerWatt = estTokens > 0 ? (estTokens / tdp).toFixed(2) : '0.00';
+
+        // 최적 추천 여부
+        const isBestFit = bestComfortableModel && bestComfortableModel.id === m.id;
+
+        rowsHtml += `
+          <tr class="hover:bg-slate-800/40 transition-colors duration-150 ${isBestFit ? 'bg-indigo-950/20' : ''}">
+            <td class="py-4 px-4">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-white text-base">${m.name}</span>
+                <span class="text-[11px] px-2 py-0.5 rounded-full font-medium ${
+                  m.category === 'korean' ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30' :
+                  m.category === 'reasoning' ? 'bg-purple-500/15 text-purple-300 border border-purple-500/30' :
+                  m.category === 'coding' ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30' :
+                  'bg-slate-700/40 text-slate-300 border border-slate-600/30'
+                }">${m.categoryLabel}</span>
+                ${isBestFit ? `<span class="text-[10px] bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold px-2 py-0.5 rounded-md shadow-sm animate-pulse">✨ 내 PC 최적픽</span>` : ''}
+              </div>
+              <div class="text-xs text-slate-400 mt-1 leading-normal">${m.desc}</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">추천 용도: ${m.recommendedFor}</div>
+            </td>
+
+            <td class="py-4 px-3 font-mono">
+              <div class="text-slate-200 font-bold text-sm">${reqVram} GB</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">가중치 ${modelWeight}G + KV ${modelKv}G</div>
+            </td>
+
+            <td class="py-4 px-3">
+              <div class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md border ${badgeClass}">
+                <span class="w-1.5 h-1.5 rounded-full ${estTokens >= 15 ? 'bg-emerald-400' : estTokens > 0 ? 'bg-amber-400' : 'bg-rose-400'}"></span>
+                ${status}
+              </div>
+              <div class="w-32 bg-slate-800 rounded-full h-1.5 mt-2 overflow-hidden">
+                <div class="${barColor} h-1.5 rounded-full" style="width: ${memUsagePercent}%"></div>
+              </div>
+              <div class="text-[10px] text-slate-500 mt-0.5 font-mono">
+                ${isIGPU ? `가용 RAM ${memUsagePercent}% 점유` : `VRAM ${memUsagePercent}% 점유`}
+              </div>
+            </td>
+
+            <td class="py-4 px-3">
+              <div class="font-bold font-mono text-base ${estTokens >= 20 ? 'text-indigo-400' : estTokens >= 8 ? 'text-emerald-400' : estTokens > 0 ? 'text-amber-400' : 'text-slate-600'}">
+                ${estTokens > 0 ? `약 ${estTokens} t/s` : '구동 불가'}
+              </div>
+              <div class="text-[11px] text-slate-400 mt-0.5">
+                ${estTokens >= 20 ? '⚡ 초고속' : estTokens >= 8 ? '🟢 체감 원활' : estTokens > 0 ? '🟠 타이핑 딜레이' : '❌ 메모리 부족'}
+              </div>
+            </td>
+
+            <td class="py-4 px-3 text-xs text-slate-300 font-mono">
+              ${estTokens > 0 ? `
+                <div class="text-indigo-300 font-medium">⚡ ${tokenPerWatt} t/W</div>
+                <div class="text-slate-500 text-[11px] mt-0.5">최대 약 ${tdp}W</div>
+              ` : `<span class="text-slate-600">-</span>`}
+            </td>
+
+            <td class="py-4 px-4">
+              <div class="flex items-center gap-1.5 bg-slate-950/90 px-3 py-1.5 rounded-lg border border-slate-800 group hover:border-slate-700 transition">
+                <code class="text-xs text-indigo-300 font-mono select-all truncate max-w-[150px] md:max-w-[190px]">${m.cmd}</code>
+                <button onclick="copyCmd('${m.cmd}', this)" class="text-xs text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 px-2 py-0.5 rounded transition flex-shrink-0 cursor-pointer">
+                  복사
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+
+      modelTableBody.innerHTML = rowsHtml;
+
+      // 상단 요약 카드 업데이트 (한국 주택용 저압 1kWh 약 150원 기준 계산)
+      const hourlyCost = Math.round((tdp / 1000) * 150);
+      const bestName = bestComfortableModel ? bestComfortableModel.name : (isIGPU ? "없음 (RAM 부족)" : "없음 (VRAM 증설 필요)");
+      const bestDesc = isIGPU 
+        ? (bestComfortableModel ? `내장 그래픽(16GB RAM) 환경에서 딜레이 없이 가장 쾌적하게 작동하는 모델` : "현재 RAM 용량으로는 쾌적 구동이 어렵습니다.")
+        : (bestComfortableModel ? `VRAM ${vram}GB 이내 100% 탑재되는 최대 추천 모델` : "현재 VRAM 용량으로는 쾌적 구동 가능한 모델이 없습니다.");
+
+      summaryBanner.innerHTML = `
+        <div class="bg-gradient-to-br from-slate-900 to-slate-900/80 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-emerald-500/40 transition">
+          <div class="text-xs font-semibold text-emerald-400 mb-1 flex items-center gap-1.5">
+            <span>🎯</span> 내 PC 쾌적 구동 베스트 추천 모델
+          </div>
+          <div class="text-xl font-extrabold text-white tracking-tight mt-1 truncate">${bestName}</div>
+          <div class="text-xs text-slate-400 mt-1.5 leading-relaxed">${bestDesc}</div>
+        </div>
+
+        <div class="bg-gradient-to-br from-slate-900 to-slate-900/80 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-indigo-500/40 transition">
+          <div class="text-xs font-semibold text-indigo-400 mb-1 flex items-center gap-1.5">
+            <span>⚡</span> 최고 기대 응답 속도
+          </div>
+          <div class="text-xl font-extrabold text-white tracking-tight mt-1 font-mono">
+            ${maxSpeed > 0 ? `초당 최대 약 ${maxSpeed} 토큰` : '구동 불가'}
+          </div>
+          <div class="text-xs text-slate-400 mt-1.5 leading-relaxed">
+            ${maxSpeed >= 20 ? '사람 읽는 속도(15~20 t/s)를 여유 있게 상회하여 즉각 체감 가능' : '경량 모델 구동 기준 실효 속도'}
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-slate-900 to-slate-900/80 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-amber-500/40 transition">
+          <div class="text-xs font-semibold text-amber-400 mb-1 flex items-center gap-1.5">
+            <span>💡</span> 1시간 풀가동 시 예상 전기요금
+          </div>
+          <div class="text-xl font-extrabold text-white tracking-tight mt-1 font-mono">
+            약 ${hourlyCost}원 <span class="text-xs text-slate-400 font-normal">/ 시간</span>
+          </div>
+          <div class="text-xs text-slate-400 mt-1.5 leading-relaxed">
+            최대 전력(${tdp}W) 풀로드 기준 (가정용 한전 요금 kWh당 150원 환산)
+          </div>
+        </div>
+      `;
+    }
+
+    // 초기 실행
+    detectClientGpu();
+    loadFromUrlParams();
+    calculate();
+  </script>
+</body>
+</html>
