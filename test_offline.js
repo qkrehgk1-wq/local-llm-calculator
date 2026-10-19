@@ -22,4 +22,10 @@ t('개인 PC 사양·홍보 문구가 남아 있지 않다', () => {
 t('스크립트가 함께 있는 로컬 파일을 가리킨다', () => {
   assert.ok(html.includes('src="calc.js"') && html.includes('src="app.js"'));
 });
+t('외부 링크는 새 탭으로만 열리고 opener 를 넘기지 않는다', () => {
+  const app = files['app.js'];
+  const anchors = app.match(/<a href=[^>]*>/g) || [];
+  assert.ok(anchors.length >= 3, '링크가 없음');
+  for (const a of anchors) assert.ok(a.includes('target="_blank"') && a.includes('rel="noopener noreferrer"'), a);
+});
 console.log(`\n${n}개 통과`);

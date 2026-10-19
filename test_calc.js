@@ -82,4 +82,12 @@ t('모델 목록: id 중복 없음, 홍보성 최상급 표현 없음', () => {
   for (const m of C.MODELS) assert.ok(!banned.test(m.desc + m.recommendedFor), m.name);
 });
 
+t('모든 모델에 공식 페이지와 Ollama 페이지 주소가 있다 (https, 실행 명령과 같은 모델)', () => {
+  for (const m of C.MODELS) {
+    assert.ok(/^https:\/\/huggingface\.co\/[\w.-]+\/[\w.-]+$/.test(m.official), m.id + ' 공식 페이지');
+    const tag = m.cmd.split(' ')[2].split(':')[0];
+    assert.strictEqual(m.ollama, 'https://ollama.com/library/' + tag, m.id + ' Ollama 페이지');
+  }
+});
+
 console.log(`\n${n}개 통과`);

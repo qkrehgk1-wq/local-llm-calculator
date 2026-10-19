@@ -78,6 +78,32 @@
       desc: 'Meta 대형 모델(큰 메모리 필요)', cmd: 'ollama run llama3.3:70b', recommendedFor: '고사양 서버용' },
   ];
 
+  // 모델별 공식 페이지: 개발사가 공개한 모델 카드(Hugging Face). Ollama 페이지는 실행 명령에서 만든다.
+  // 링크는 사용자가 누를 때만 열린다(계산기 자체는 인터넷 없이 동작).
+  const OFFICIAL = {
+    'exaone-2.4b': 'https://huggingface.co/LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct',
+    'exaone-7.8b': 'https://huggingface.co/LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct',
+    'exaone-32b': 'https://huggingface.co/LGAI-EXAONE/EXAONE-3.5-32B-Instruct',
+    'deepseek-r1-1.5b': 'https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B',
+    'deepseek-r1-8b': 'https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B',
+    'deepseek-r1-14b': 'https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-14B',
+    'deepseek-r1-32b': 'https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B',
+    'deepseek-r1-70b': 'https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-70B',
+    'qwen-coder-7b': 'https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct',
+    'qwen-coder-14b': 'https://huggingface.co/Qwen/Qwen2.5-Coder-14B-Instruct',
+    'qwen-14b': 'https://huggingface.co/Qwen/Qwen2.5-14B-Instruct',
+    'qwen-32b': 'https://huggingface.co/Qwen/Qwen2.5-32B-Instruct',
+    'llama-3.2-3b': 'https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct',
+    'llama-3.1-8b': 'https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct',
+    'gemma-2-9b': 'https://huggingface.co/google/gemma-2-9b-it',
+    'llama-3.3-70b': 'https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct',
+  };
+  for (const m of MODELS) {
+    m.official = OFFICIAL[m.id] || '';
+    const tag = /^ollama run ([a-z0-9.\-]+)(?::|$)/.exec(m.cmd);
+    m.ollama = tag ? `https://ollama.com/library/${tag[1]}` : '';
+  }
+
   // KV 캐시 근사: 문맥 8K 에서 8B 모델 기준 약 1.2GB, 모델 크기의 제곱근에 비례한다고 단순화.
   // 실제는 모델 구조(층 수, KV 헤드 수)에 따라 다르므로 ±수십 % 오차가 있다.
   function kvCacheGB(paramsB, ctxTokens) {

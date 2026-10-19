@@ -33,6 +33,14 @@
     return ['구동 불가 (메모리 부족)', 'rose'];
   }
 
+  // 모델 이름 아래 공식 페이지 링크 (누를 때만 인터넷 사용)
+  function links(m) {
+    const a = [];
+    if (m.official) a.push(`<a href="${esc(m.official)}" target="_blank" rel="noopener noreferrer" class="ext-link">공식 페이지 ↗</a>`);
+    if (m.ollama) a.push(`<a href="${esc(m.ollama)}" target="_blank" rel="noopener noreferrer" class="ext-link">Ollama 페이지 ↗</a>`);
+    return a.length ? `<div class="text-[11px] text-slate-400 mt-1 flex gap-3">${a.join('')}</div>` : '';
+  }
+
   function row(m, e, tdp, isBest) {
     const [status, tone] = statusOf(e);
     const badge = `bg-${tone}-500/10 text-${tone}-400 border-${tone}-500/30`;
@@ -44,12 +52,13 @@
       <tr class="hover:bg-slate-800/40 ${isBest ? 'bg-indigo-950/20' : ''}">
         <td class="py-4 px-4">
           <div class="flex items-center gap-2 flex-wrap">
-            <span class="font-bold text-white text-base">${esc(m.name)}</span>
+            ${m.official ? `<a href="${esc(m.official)}" target="_blank" rel="noopener noreferrer" title="개발사 공식 페이지 열기" class="font-bold text-white text-base ext-link">${esc(m.name)}</a>` : `<span class="font-bold text-white text-base">${esc(m.name)}</span>`}
             <span class="text-[11px] px-2 py-0.5 rounded-full font-medium bg-slate-700/40 text-slate-300 border border-slate-600/30">${esc(m.categoryLabel)}</span>
             ${isBest ? '<span class="text-[10px] bg-indigo-600 text-white font-bold px-2 py-0.5 rounded-md">추천</span>' : ''}
           </div>
           <div class="text-xs text-slate-400 mt-1 leading-normal">${esc(m.desc)}</div>
           <div class="text-[11px] text-slate-500 mt-0.5">쓰임새: ${esc(m.recommendedFor)}</div>
+          ${links(m)}
         </td>
         <td class="py-4 px-3 font-mono">
           <div class="text-slate-200 font-bold text-sm">${e.req} GB</div>
@@ -102,8 +111,9 @@
     summaryBanner.innerHTML = `
       <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
         <div class="text-xs font-semibold text-emerald-400 mb-1">추천 모델 (이 설정 기준)</div>
-        <div class="text-xl font-extrabold text-white mt-1 truncate">${esc(bestName)}</div>
+        <div class="text-xl font-extrabold text-white mt-1 truncate">${best && best.official ? `<a href="${esc(best.official)}" target="_blank" rel="noopener noreferrer" title="개발사 공식 페이지 열기" class="ext-link">${esc(bestName)}</a>` : esc(bestName)}</div>
         <div class="text-xs text-slate-400 mt-1.5 leading-relaxed">${esc(bestDesc)}</div>
+        ${best ? links(best) : ''}
       </div>
       <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
         <div class="text-xs font-semibold text-indigo-400 mb-1">가장 빠른 모델의 예상 속도</div>
