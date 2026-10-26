@@ -111,3 +111,7 @@ pyinstaller --noconfirm --onefile --windowed --name LocalLLMCalculator ^
 
 ## 라이선스
 MIT. `LICENSE`를 참고하세요.
+
+---
+
+**📝 써 본 후기와 계산 원리 (한국어 블로그):** [내 노트북으로 로컬 AI 돌릴 수 있을까? 계산기 써 보고 바로 고친 점](https://kaharana1.mycafe24.com/?p=1764) · [Ollama 모델 VRAM 계산 — 내 노트북으로 재 보니 계산이 2배 틀렸다](https://kaharana1.mycafe24.com/ollama-vram-calculator-build-story/)
